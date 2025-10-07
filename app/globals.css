@@ -176,6 +176,10 @@
   }
 }
 
+button{
+  cursor: pointer;
+}
+
 .glow-pulse {
   animation: glow-pulse 2s ease-in-out infinite;
 }

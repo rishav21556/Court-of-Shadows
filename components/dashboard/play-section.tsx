@@ -4,9 +4,11 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Crown, Users, Swords, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation"
 
 export function PlaySection() {
   const [isMatchmaking, setIsMatchmaking] = useState(false)
+  const router = useRouter()
 
   const handleEnterCourt = () => {
     setIsMatchmaking(true)
@@ -14,6 +16,7 @@ export function PlaySection() {
     setTimeout(() => {
       setIsMatchmaking(false)
     }, 5000)
+    router.push("/main-zone")
   }
 
   return (
