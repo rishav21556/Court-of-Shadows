@@ -6,8 +6,11 @@ import { TutorialPanel } from "@/components/dashboard/tutorial-panel"
 import { PlaySection } from "@/components/dashboard/play-section"
 import { Footer } from "@/components/dashboard/footer"
 import { FloatingParticles } from "@/components/dashboard/floating-particles"
+import { useAuth } from "@/components/auth/AuthWrapper"
 
 export function Dashboard() {
+  const { user } = useAuth();
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-stone-50 via-white to-stone-100">
       {/* Background decorative elements */}

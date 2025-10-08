@@ -1,7 +1,7 @@
-
+// components/auth/AuthWrapper.tsx
 'use client';
 
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface AuthResponse {
@@ -12,13 +12,29 @@ interface AuthResponse {
   exp: number;
 }
 
+interface AuthContextType {
+  user: AuthResponse | null;
+  isLoading: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within AuthWrapper');
+  }
+  return context;
+}
+
 interface AuthWrapperProps {
   children: React.ReactNode;
 }
 
 export default function AuthWrapper({ children }: AuthWrapperProps) {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<AuthResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const verifyAuth = async () => {
@@ -39,7 +55,8 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
 
         if (response.ok) {
           const data: AuthResponse = await response.json();
-          setIsAuthenticated(true);
+          setUser(data);
+          setIsLoading(false);
         } else {
           router.push('/auth/login');
         }
@@ -52,9 +69,13 @@ export default function AuthWrapper({ children }: AuthWrapperProps) {
     verifyAuth();
   }, [router]);
 
-  if (!isAuthenticated) {
+  if (isLoading || !user) {
     return null;
   }
 
-  return <>{children}</>;
+  return (
+    <AuthContext.Provider value={{ user, isLoading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
