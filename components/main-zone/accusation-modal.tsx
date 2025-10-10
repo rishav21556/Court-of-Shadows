@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils"
 
 interface AccusationModalProps {
   isOpen: boolean
-  accusedPlayer: Player | null
+  accusedPlayer: Player | null | undefined
   onClose: () => void
   onSubmitAccusation: (charges: string) => void
 }

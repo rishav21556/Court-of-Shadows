@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator"
 
 interface SpyModalProps {
   isOpen: boolean
-  targetPlayer: Player | null
+  targetPlayer: Player | null | undefined
   onClose: () => void
   onConfirmSpy: () => void
 }
