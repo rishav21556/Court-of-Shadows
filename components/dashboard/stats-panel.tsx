@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Trophy, Coins, Sword, Target, Crown } from "lucide-react"
 import { Card } from "@/components/ui/card"
+import { useAuth } from "../auth/AuthWrapper"
 
 interface StatItemProps {
   icon: React.ReactNode
@@ -59,6 +60,7 @@ function StatItem({ icon, label, value, suffix = "", delay }: StatItemProps) {
 }
 
 export function StatsPanel() {
+  const { user } = useAuth();
   return (
     <motion.div
       initial={{ opacity: 0, x: -50 }}
@@ -88,10 +90,14 @@ export function StatsPanel() {
 
           {/* Stats */}
           <div className="space-y-3">
-            <StatItem icon={<Target className="h-5 w-5" />} label="Games Played" value={47} delay={0.1} />
-            <StatItem icon={<Trophy className="h-5 w-5" />} label="Win Rate" value={68} suffix="%" delay={0.2} />
-            <StatItem icon={<Coins className="h-5 w-5" />} label="Gold Owned" value={2450} delay={0.3} />
-            <StatItem icon={<Sword className="h-5 w-5" />} label="Knight Power" value={89} delay={0.4} />
+            {user?.total_wins && user?.total_wins > 0 && (
+              <>
+                <StatItem icon={<Target className="h-5 w-5" />} label="Games Played" value={user?.total_games || 0} delay={0.1} />
+                <StatItem icon={<Trophy className="h-5 w-5" />} label="Total Wins" value={user?.total_wins || 0} delay={0.2} />
+                <StatItem icon={<Coins className="h-5 w-5" />} label="Win Percentage" value={((user?.total_wins || 0) / (user?.total_games || 1) * 100) || 0} suffix="%" delay={0.3} />
+              </>            
+            )}
+            <StatItem icon={<Sword className="h-5 w-5" />} label="Rating" value={user?.rating || 500} delay={0.4} />
           </div>
         </div>
       </Card>
