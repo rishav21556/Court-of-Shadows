@@ -6,7 +6,7 @@ import { Crown, Users, Swords, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 
-export function PlaySection() {
+export function PlaySection({totalUsers, onlineUsers}: {totalUsers: number, onlineUsers: number}) {
   const [isMatchmaking, setIsMatchmaking] = useState(false)
   const router = useRouter()
 
@@ -99,7 +99,7 @@ export function PlaySection() {
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
             <Users className="h-4 w-4" />
-            <span className="font-medium">32 players online</span>
+            <span className="font-medium">{onlineUsers} {onlineUsers === 1 ? 'Player' : 'Players'} online</span>
           </div>
           <div className="h-4 w-px bg-stone-300" />
           <div className="flex items-center gap-2">

@@ -7,9 +7,22 @@ import { PlaySection } from "@/components/dashboard/play-section"
 import { Footer } from "@/components/dashboard/footer"
 import { FloatingParticles } from "@/components/dashboard/floating-particles"
 import { useAuth } from "@/components/auth/AuthWrapper"
+import { useEffect, useState } from "react"
+import { Socket } from "socket.io-client"
 
 export function Dashboard() {
-  const { user } = useAuth();
+  const { user, socket } = useAuth();
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [onlineUsers, setOnlineUsers] = useState(0);
+
+  useEffect(()=>{
+    if (socket) {
+      socket.on('dashboard_data',(data:{ totalUsers: number; onlineUsers: number; })=>{
+        setTotalUsers(data.totalUsers);
+        setOnlineUsers(data.onlineUsers);
+      })
+    };
+  },[socket])
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-stone-50 via-white to-stone-100">
@@ -27,7 +40,7 @@ export function Dashboard() {
             {/* Desktop: 3-column layout, Mobile: stacked */}
             <div className="grid gap-6 lg:grid-cols-[300px_1fr_300px]">
               <StatsPanel />
-              <PlaySection />
+              <PlaySection totalUsers={totalUsers} onlineUsers={onlineUsers} />
               <TutorialPanel />
             </div>
           </div>
